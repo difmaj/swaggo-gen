@@ -2,42 +2,47 @@ package model_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"testing"
 
 	"github.com/difmaj/swaggo-gen/internal/model"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMarshalJson(t *testing.T) {
-	response := new(model.Swagger)
+	swaggerModel := new(model.Swagger)
 
 	file, err := os.Open("../../examples/swagger-bling.json")
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		t.Fatalf("Failed to open file: %v", err)
 	}
 	defer file.Close()
 
-	jsonRef, err := io.ReadAll(file)
+	fileContent, err := io.ReadAll(file)
 	if err != nil {
-		fmt.Println("Error reading file:", err)
-		os.Exit(1)
+		t.Fatalf("Error reading file: %v", err)
 	}
 
-	if err := json.Unmarshal(jsonRef, &response); err != nil {
-		fmt.Println("Error parsing ref:", err)
+	if err := json.Unmarshal(fileContent, &swaggerModel); err != nil {
+		t.Fatalf("Error parsing ref: %v", err)
 	}
 
-	fmt.Println(response)
-
-	jsonStr, err := json.MarshalIndent(response, " ", "\t")
-
+	modelIndented, err := json.MarshalIndent(swaggerModel, "", "    ")
 	if err != nil {
-		fmt.Println("Error indenting:", err)
-		os.Exit(1)
+		t.Fatalf("Error indenting: %v", err)
 	}
 
-	fmt.Println(string(jsonStr))
+	var originalJson map[string]interface{}
+	var marshaledJson map[string]interface{}
+
+	if err := json.Unmarshal(fileContent, &originalJson); err != nil {
+		t.Fatalf("Error unmarshaling original JSON: %v", err)
+	}
+
+	if err := json.Unmarshal(modelIndented, &marshaledJson); err != nil {
+		t.Fatalf("Error unmarshaling marshaled JSON: %v", err)
+	}
+
+	assert.Equal(t, originalJson, marshaledJson, "The JSON structures are not equal.")
 }
