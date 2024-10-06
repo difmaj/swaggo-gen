@@ -88,13 +88,16 @@ type Schema struct {
 	Required    []string          `json:"required,omitempty"`
 	ReadOnly    *bool             `json:"readOnly,omitempty"`
 	WriteOnly   *bool             `json:"writeOnly,omitempty"`
+	Minimum     *int              `json:"minimum,omitempty"`
+	MaxLength   *int              `json:"maxLength,omitempty"`
 }
 
 type Components struct {
-	Schemas         map[string]Schema         `json:"schemas"`
-	Responses       map[string]Response       `json:"responses"`
-	Parameters      map[string]Parameter      `json:"parameters"`
+	Schemas         map[string]Schema         `json:"schemas,omitempty"`
+	Responses       map[string]Response       `json:"responses,omitempty"`
+	Parameters      map[string]Parameter      `json:"parameters,omitempty"`
 	SecuritySchemes map[string]SecurityScheme `json:"securitySchemes,omitempty"`
+	Headers         map[string]Header         `json:"headers,omitempty"`
 }
 
 type SecurityScheme struct {
@@ -105,5 +108,6 @@ type SecurityScheme struct {
 type Security map[string]any
 
 type Tag struct {
-	Name string `json:"name"`
+	Name        *string `json:"name"`
+	Description *string `json:"description,omitempty"`
 }
