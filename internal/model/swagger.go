@@ -45,6 +45,8 @@ type Parameter struct {
 	Required    *bool   `json:"required,omitempty"`
 	Schema      *Schema `json:"schema,omitempty"`
 	Ref         *string `json:"$ref,omitempty"`
+	Minimum     *int    `json:"minimum,omitempty"`
+	Default     *any    `json:"default,omitempty"`
 }
 
 type RequestBody struct {
@@ -57,6 +59,13 @@ type Response struct {
 	Ref         *string              `json:"$ref,omitempty"`
 	Description *string              `json:"description,omitempty"`
 	Content     map[string]MediaType `json:"content,omitempty"`
+	Headers     map[string]Header    `json:"headers,omitempty"`
+}
+
+type Header struct {
+	Ref         *string `json:"$ref,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Schema      *Schema `json:"schema,omitempty"`
 }
 
 type MediaType struct {
@@ -77,12 +86,20 @@ type Schema struct {
 	Properties  map[string]Schema `json:"properties,omitempty"`
 	Description *string           `json:"description,omitempty"`
 	Required    []string          `json:"required,omitempty"`
+	ReadOnly    *bool             `json:"readOnly,omitempty"`
+	WriteOnly   *bool             `json:"writeOnly,omitempty"`
 }
 
 type Components struct {
-	Schemas    map[string]Schema    `json:"schemas"`
-	Responses  map[string]Response  `json:"responses"`
-	Parameters map[string]Parameter `json:"parameters"`
+	Schemas         map[string]Schema         `json:"schemas"`
+	Responses       map[string]Response       `json:"responses"`
+	Parameters      map[string]Parameter      `json:"parameters"`
+	SecuritySchemes map[string]SecurityScheme `json:"securitySchemes,omitempty"`
+}
+
+type SecurityScheme struct {
+	Type  string `json:"type"`
+	Flows any    `json:"flows,omitempty"`
 }
 
 type Security map[string]any
