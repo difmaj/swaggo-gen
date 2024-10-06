@@ -33,8 +33,8 @@ func TestMarshalJson(t *testing.T) {
 		t.Fatalf("Error indenting: %v", err)
 	}
 
-	var originalJson map[string]interface{}
-	var marshaledJson map[string]interface{}
+	var originalJson map[string]any
+	var marshaledJson map[string]any
 
 	if err := json.Unmarshal(fileContent, &originalJson); err != nil {
 		t.Fatalf("Error unmarshaling original JSON: %v", err)
