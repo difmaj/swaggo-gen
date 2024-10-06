@@ -3,7 +3,7 @@ package model_test
 import (
 	"encoding/json"
 	"io"
-	"os"
+	"net/http"
 	"testing"
 
 	"github.com/difmaj/swaggo-gen/internal/model"
@@ -13,15 +13,21 @@ import (
 func TestMarshalJson(t *testing.T) {
 	swaggerModel := new(model.Swagger)
 
-	file, err := os.Open("../../examples/swagger-bling.json")
-	if err != nil {
-		t.Fatalf("Failed to open file: %v", err)
-	}
-	defer file.Close()
+	url := "https://developer.bling.com.br/build/assets/openapi-2aa7117f.json"
 
-	fileContent, err := io.ReadAll(file)
+	resp, err := http.Get(url)
 	if err != nil {
-		t.Fatalf("Error reading file: %v", err)
+		t.Fatalf("Failed to download JSON: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		t.Fatalf("Received non-200 response status: %s", resp.Status)
+	}
+
+	fileContent, err := io.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("Error reading response body: %v", err)
 	}
 
 	if err := json.Unmarshal(fileContent, &swaggerModel); err != nil {
