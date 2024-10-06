@@ -31,8 +31,8 @@ type PathItem struct {
 
 type Operation struct {
 	Tags        []string            `json:"tags"`
-	Summary     string              `json:"summary"`
-	Description string              `json:"description"`
+	Summary     *string             `json:"summary"`
+	Description *string             `json:"description"`
 	Parameters  []Parameter         `json:"parameters,omitempty"`
 	RequestBody *RequestBody        `json:"requestBody,omitempty"`
 	Responses   map[string]Response `json:"responses"`
@@ -48,12 +48,14 @@ type Parameter struct {
 }
 
 type RequestBody struct {
-	Required bool                 `json:"required"`
-	Content  map[string]MediaType `json:"content"`
+	Ref      *string               `json:"$ref,omitempty"`
+	Required *bool                 `json:"required,omitempty"`
+	Content  *map[string]MediaType `json:"content,omitempty"`
 }
 
 type Response struct {
-	Description string               `json:"description"`
+	Ref         *string              `json:"$ref,omitempty"`
+	Description *string              `json:"description,omitempty"`
 	Content     map[string]MediaType `json:"content,omitempty"`
 }
 
@@ -62,13 +64,13 @@ type MediaType struct {
 }
 
 type Schema struct {
-	Type       *string            `json:"type,omitempty"`
-	Ref        *string            `json:"$ref,omitempty"`
-	Items      *Schema            `json:"items,omitempty"`
-	Enum       []any              `json:"enum,omitempty"`
-	AllOf      []Schema           `json:"allOf,omitempty"`
-	Example    *any               `json:"example,omitempty"`
-	Properties *map[string]Schema `json:"properties,omitempty"`
+	Type       *string           `json:"type,omitempty"`
+	Ref        *string           `json:"$ref,omitempty"`
+	Items      *Schema           `json:"items,omitempty"`
+	Enum       []any             `json:"enum,omitempty"`
+	AllOf      []Schema          `json:"allOf,omitempty"`
+	Example    *any              `json:"example,omitempty"`
+	Properties map[string]Schema `json:"properties,omitempty"`
 }
 
 type Components struct {
