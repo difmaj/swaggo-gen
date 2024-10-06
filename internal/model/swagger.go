@@ -70,6 +70,8 @@ type Schema struct {
 	Enum       []any             `json:"enum,omitempty"`
 	AllOf      []Schema          `json:"allOf,omitempty"`
 	Example    *any              `json:"example,omitempty"`
+	Format     *string           `json:"format,omitempty"`
+	Default    *any              `json:"default,omitempty"`
 	Properties map[string]Schema `json:"properties,omitempty"`
 }
 
