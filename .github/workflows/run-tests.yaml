@@ -1,0 +1,15 @@
+name: On PR => Run tests
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go environment
+        uses: actions/setup-go@v5.0.2
+
+      - name: Run tests
+        run: go test ./...
