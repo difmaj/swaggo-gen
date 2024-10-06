@@ -64,15 +64,19 @@ type MediaType struct {
 }
 
 type Schema struct {
-	Type       *string           `json:"type,omitempty"`
-	Ref        *string           `json:"$ref,omitempty"`
-	Items      *Schema           `json:"items,omitempty"`
-	Enum       []any             `json:"enum,omitempty"`
-	AllOf      []Schema          `json:"allOf,omitempty"`
-	Example    *any              `json:"example,omitempty"`
-	Format     *string           `json:"format,omitempty"`
-	Default    *any              `json:"default,omitempty"`
-	Properties map[string]Schema `json:"properties,omitempty"`
+	Type        *string           `json:"type,omitempty"`
+	Ref         *string           `json:"$ref,omitempty"`
+	Items       *Schema           `json:"items,omitempty"`
+	Enum        []any             `json:"enum,omitempty"`
+	AllOf       []Schema          `json:"allOf,omitempty"`
+	AnyOf       []Schema          `json:"anyOf,omitempty"`
+	OneOf       []Schema          `json:"oneOf,omitempty"`
+	Example     *any              `json:"example,omitempty"`
+	Format      *string           `json:"format,omitempty"`
+	Default     *any              `json:"default,omitempty"`
+	Properties  map[string]Schema `json:"properties,omitempty"`
+	Description *string           `json:"description,omitempty"`
+	Required    []string          `json:"required,omitempty"`
 }
 
 type Components struct {
