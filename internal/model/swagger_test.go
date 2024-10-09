@@ -2,39 +2,19 @@ package model_test
 
 import (
 	"encoding/json"
-	"io"
-	"net/http"
 	"testing"
 
-	"github.com/difmaj/swaggo-gen/internal/model"
+	"github.com/difmaj/swaggo-gen/internal/test"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMarshalJson(t *testing.T) {
-	swaggerModel := new(model.Swagger)
-
-	url := "https://developer.bling.com.br/build/assets/openapi-2aa7117f.json"
-
-	resp, err := http.Get(url)
+	outModel, err := test.GetModel()
 	if err != nil {
-		t.Fatalf("Failed to download JSON: %v", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		t.Fatalf("Received non-200 response status: %s", resp.Status)
+		t.Fatalf("Error on getting model: %v", err)
 	}
 
-	fileContent, err := io.ReadAll(resp.Body)
-	if err != nil {
-		t.Fatalf("Error reading response body: %v", err)
-	}
-
-	if err := json.Unmarshal(fileContent, &swaggerModel); err != nil {
-		t.Fatalf("Error parsing ref: %v", err)
-	}
-
-	modelIndented, err := json.MarshalIndent(swaggerModel, "", "    ")
+	modelIndented, err := json.MarshalIndent(outModel.SwaggerModel, "", "    ")
 	if err != nil {
 		t.Fatalf("Error indenting: %v", err)
 	}
@@ -42,7 +22,7 @@ func TestMarshalJson(t *testing.T) {
 	var originalJson map[string]any
 	var marshaledJson map[string]any
 
-	if err := json.Unmarshal(fileContent, &originalJson); err != nil {
+	if err := json.Unmarshal(outModel.FileContent, &originalJson); err != nil {
 		t.Fatalf("Error unmarshaling original JSON: %v", err)
 	}
 
